@@ -325,35 +325,7 @@ export const AmperaCanvas: React.FC<AmperaCanvasProps> = ({
             <line x1="140" y1="230" x2="140" y2="240" stroke="#94a3b8" strokeWidth="2" />
           </g>
 
-          {/* 4. ZERO REFERENCE LINE (TITIK ACUAN NORMAL 0 M) */}
-          <g id="zeroReferencePlane">
-            <line
-              x1="0"
-              y1={normalY}
-              x2="1000"
-              y2={normalY}
-              stroke="#fbbf24"
-              strokeWidth="1.8"
-              strokeDasharray="6,4"
-              opacity="0.8"
-            />
-            {/* Zero label banner on the left */}
-            <rect x="8" y={normalY - 10} width="96" height="20" fill="#0f172a" rx="4" opacity="0.9" />
-            <rect x="8" y={normalY - 10} width="96" height="20" stroke="#fbbf24" strokeWidth="1" rx="4" fill="none" />
-            <text
-              x="56"
-              y={normalY + 4}
-              fill="#fbbf24"
-              fontSize="9"
-              fontWeight="bold"
-              textAnchor="middle"
-              fontFamily="sans-serif"
-            >
-              Titik Acuan (0m)
-            </text>
-          </g>
-
-          {/* 5. SUNGAI MUSI WATER BODY (DYNAMIC HEIGHT) */}
+          {/* 4. SUNGAI MUSI WATER BODY (DYNAMIC HEIGHT) */}
           <g id="waterBody">
             {/* Main water mass */}
             <rect
@@ -396,6 +368,92 @@ export const AmperaCanvas: React.FC<AmperaCanvasProps> = ({
             {/* River bed silt layer at bottom */}
             <rect x="0" y="535" width="1000" height="25" fill="url(#riverBedGrad)" />
             <line x1="0" y1="535" x2="1000" y2="535" stroke="#78350f" strokeWidth="2" />
+          </g>
+
+          {/* 5A. STARTING LEVEL LINE (TITIK AWAL MULA-MULA) - Visible when changing levels */}
+          {previousLevel !== null && previousLevel !== clampedLevel && (
+            <g id="startingLevelPlane" className="transition-all duration-700 ease-out pointer-events-none">
+              <line
+                x1="0"
+                y1={normalY - previousLevel * pixelsPerMeter}
+                x2="1000"
+                y2={normalY - previousLevel * pixelsPerMeter}
+                stroke="#c084fc"
+                strokeWidth="2"
+                strokeDasharray="4,4"
+                opacity="0.9"
+              />
+              <rect
+                x="8"
+                y={normalY - previousLevel * pixelsPerMeter - 10}
+                width="100"
+                height="20"
+                fill="#1e1b4b"
+                rx="4"
+                opacity="0.95"
+              />
+              <rect
+                x="8"
+                y={normalY - previousLevel * pixelsPerMeter - 10}
+                width="100"
+                height="20"
+                stroke="#c084fc"
+                strokeWidth="1.2"
+                rx="4"
+                fill="none"
+              />
+              <text
+                x="58"
+                y={normalY - previousLevel * pixelsPerMeter + 4}
+                fill="#e9d5ff"
+                fontSize="9"
+                fontWeight="bold"
+                textAnchor="middle"
+                fontFamily="sans-serif"
+              >
+                Titik Awal ({previousLevel > 0 ? `+${previousLevel}` : previousLevel}m)
+              </text>
+            </g>
+          )}
+
+          {/* 5B. ZERO REFERENCE LINE (TITIK ACUAN NORMAL 0 M) - Rendered ON TOP of water body so it remains visible even when water rises */}
+          <g id="zeroReferencePlane" className="pointer-events-none">
+            {/* Subtle glow under line */}
+            <line
+              x1="0"
+              y1={normalY}
+              x2="1000"
+              y2={normalY}
+              stroke="#fbbf24"
+              strokeWidth="4"
+              opacity="0.3"
+            />
+            {/* Main dashed zero reference line */}
+            <line
+              x1="0"
+              y1={normalY}
+              x2="1000"
+              y2={normalY}
+              stroke="#fbbf24"
+              strokeWidth="2.2"
+              strokeDasharray="6,4"
+              opacity="0.95"
+            />
+            {/* Zero label banner on the left */}
+            <rect x="8" y={normalY - 10} width="105" height="20" fill="#0f172a" rx="4" opacity="0.95" />
+            <rect x="8" y={normalY - 10} width="105" height="20" stroke="#fbbf24" strokeWidth="1.2" rx="4" fill="none" />
+            <circle cx="18" cy={normalY} r="3" fill="#fbbf24" />
+            <text
+              x="62"
+              y={normalY + 4}
+              fill="#fbbf24"
+              fontSize="9"
+              fontWeight="bold"
+              textAnchor="middle"
+              fontFamily="sans-serif"
+            >
+              Titik Acuan (0m)
+            </text>
           </g>
 
           {/* 6. CLEARANCE DIMENSION ARROW (Between water surface and bridge deck) */}
@@ -502,7 +560,7 @@ export const AmperaCanvas: React.FC<AmperaCanvasProps> = ({
               previousLevel={previousLevel}
               interactive={interactiveGauge}
               onSelectLevel={onSelectLevel}
-              height={220}
+              height={240}
               showLabels={false}
               title="Peil Schaal"
             />

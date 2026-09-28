@@ -54,26 +54,28 @@ export const PeilSchaalGauge: React.FC<PeilSchaalGaugeProps> = ({
       <div className="relative flex items-center justify-center">
         {/* Main Gauge Container */}
         <div
-          className="relative bg-slate-950/90 border-2 border-slate-700 rounded-lg overflow-hidden shadow-2xl flex flex-col justify-between"
+          className="relative bg-slate-950/90 border-2 border-slate-700 rounded-lg shadow-2xl flex flex-col justify-between"
           style={{ height: `${height}px`, width: '84px' }}
         >
-          {/* Water Fill background in gauge */}
-          <div
-            className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-sky-800/80 via-cyan-600/70 to-sky-400/80 transition-all duration-700 ease-out z-0"
-            style={{ height: `${100 - currentPct}%` }}
-          >
-            {/* Water surface wave shimmer line */}
-            <div className="w-full h-1.5 bg-cyan-200/90 shadow-[0_0_8px_rgba(34,211,238,0.8)] animate-pulse" />
+          {/* Water Fill background in gauge - overflow hidden inside so numbers never get clipped */}
+          <div className="absolute inset-0 overflow-hidden rounded-[6px] pointer-events-none">
+            <div
+              className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-sky-800/80 via-cyan-600/70 to-sky-400/80 transition-all duration-700 ease-out z-0"
+              style={{ height: `${100 - currentPct}%` }}
+            >
+              {/* Water surface wave shimmer line */}
+              <div className="w-full h-1.5 bg-cyan-200/90 shadow-[0_0_8px_rgba(34,211,238,0.8)] animate-pulse" />
+            </div>
           </div>
 
           {/* Reference Zero Water Plane line across gauge */}
           <div
-            className="absolute left-0 right-0 border-t-2 border-dashed border-amber-400/70 z-10 pointer-events-none"
+            className="absolute left-0 right-0 border-t-2 border-dashed border-amber-400/80 z-10 pointer-events-none"
             style={{ top: '50%' }}
           />
 
           {/* Gauge Marks */}
-          <div className="relative z-20 h-full flex flex-col justify-between py-1">
+          <div className="relative z-20 h-full flex flex-col justify-between pt-1 pb-1.5 px-1">
             {levels.map((lvl) => {
               const isZero = lvl === 0;
               const isPositive = lvl > 0;
@@ -84,7 +86,7 @@ export const PeilSchaalGauge: React.FC<PeilSchaalGaugeProps> = ({
                 <div
                   key={lvl}
                   onClick={() => interactive && onSelectLevel?.(lvl)}
-                  className={`group relative flex items-center px-2 py-0.5 cursor-pointer transition-all ${
+                  className={`group relative flex items-center px-1.5 py-0.5 cursor-pointer transition-all ${
                     interactive ? 'hover:bg-white/10' : ''
                   }`}
                   role={interactive ? 'button' : undefined}
@@ -92,7 +94,7 @@ export const PeilSchaalGauge: React.FC<PeilSchaalGaugeProps> = ({
                 >
                   {/* Gauge Tick */}
                   <div
-                    className={`h-0.5 transition-all ${
+                    className={`h-0.5 shrink-0 transition-all ${
                       isZero
                         ? 'w-5 bg-amber-400 h-1 rounded-sm'
                         : lvl % 2 === 0
@@ -103,7 +105,7 @@ export const PeilSchaalGauge: React.FC<PeilSchaalGaugeProps> = ({
 
                   {/* Level Number */}
                   <span
-                    className={`ml-1 text-xs font-mono font-bold tracking-tight transition-transform ${
+                    className={`ml-1 text-xs font-mono font-bold tracking-tight transition-transform leading-none select-none ${
                       isCurrent
                         ? 'text-white scale-110 drop-shadow-[0_0_6px_rgba(255,255,255,0.8)]'
                         : isZero
@@ -118,7 +120,7 @@ export const PeilSchaalGauge: React.FC<PeilSchaalGaugeProps> = ({
 
                   {/* Meter unit on 0 and extremes */}
                   {(lvl === 5 || lvl === 0 || lvl === -5) && (
-                    <span className="text-[9px] text-slate-400 ml-0.5">m</span>
+                    <span className="text-[9px] text-slate-400 ml-0.5 leading-none">m</span>
                   )}
 
                   {/* Active Float Indicator Needle */}
