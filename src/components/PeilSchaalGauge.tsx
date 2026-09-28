@@ -134,11 +134,6 @@ export const PeilSchaalGauge: React.FC<PeilSchaalGaugeProps> = ({
               );
             })}
           </div>
-
-          {/* Peil Schaal decorative header tag */}
-          <div className="absolute top-0 right-0 px-1 py-0.5 bg-slate-800/80 text-[8px] font-mono text-slate-400 border-b border-l border-slate-700">
-            PEIL
-          </div>
         </div>
 
         {/* Delta arrow indicator when changing */}

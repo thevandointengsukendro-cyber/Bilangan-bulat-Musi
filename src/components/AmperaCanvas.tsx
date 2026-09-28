@@ -47,20 +47,20 @@ export const AmperaCanvas: React.FC<AmperaCanvasProps> = ({
   return (
     <div className="relative w-full rounded-2xl overflow-hidden shadow-2xl border border-slate-700/80 bg-slate-950 select-none">
       {/* Top Location and Status Ribbon */}
-      <div className="absolute top-3 left-3 z-30 flex flex-wrap items-center gap-2">
-        <div className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900/85 backdrop-blur-md rounded-lg border border-slate-700 text-xs font-semibold text-slate-200 shadow-md">
-          <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
-          <span>{locationName}</span>
+      <div className="absolute top-2.5 left-2.5 z-30 flex flex-wrap items-center gap-1.5 max-w-[calc(100%-110px)]">
+        <div className="flex items-center gap-1.5 px-2.5 py-1 bg-slate-900/90 backdrop-blur-md rounded-lg border border-slate-700 text-xs font-semibold text-slate-200 shadow-md">
+          <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse shrink-0" />
+          <span className="truncate max-w-[140px] sm:max-w-[220px] md:max-w-none">{locationName}</span>
         </div>
 
         {/* Current State Indicator */}
         <div
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border backdrop-blur-md text-xs font-bold shadow-md transition-colors ${
+          className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg border backdrop-blur-md text-xs font-bold shadow-md transition-colors shrink-0 ${
             clampedLevel > 0
-              ? 'bg-cyan-950/80 border-cyan-500/50 text-cyan-300'
+              ? 'bg-cyan-950/85 border-cyan-500/50 text-cyan-300'
               : clampedLevel === 0
-              ? 'bg-amber-950/80 border-amber-500/50 text-amber-300'
-              : 'bg-rose-950/80 border-rose-500/50 text-rose-300'
+              ? 'bg-amber-950/85 border-amber-500/50 text-amber-300'
+              : 'bg-rose-950/85 border-rose-500/50 text-rose-300'
           }`}
         >
           <span>
@@ -73,12 +73,12 @@ export const AmperaCanvas: React.FC<AmperaCanvasProps> = ({
         </div>
       </div>
 
-      {/* Ampera Clearance Info Pill at top right */}
+      {/* Ampera Clearance Info Pill at bottom left (preventing overlap with top and right elements) */}
       {showClearanceInfo && (
-        <div className="absolute top-3 right-3 z-30 hidden sm:flex items-center gap-2 px-3 py-1.5 bg-slate-900/85 backdrop-blur-md rounded-lg border border-slate-700 text-xs text-slate-300 shadow-md">
+        <div className="absolute bottom-2.5 left-2.5 z-30 flex items-center gap-2 px-2.5 py-1.5 bg-slate-900/90 backdrop-blur-md rounded-lg border border-slate-700 text-xs text-slate-300 shadow-md">
           <span className="text-slate-400">Ruang Kolong Jembatan:</span>
           <span className="font-mono font-bold text-amber-300">{currentClearance} m</span>
-          <span className="text-[10px] text-slate-400">
+          <span className="text-[10px] text-slate-400 hidden xs:inline">
             {clampedLevel > 0 ? '(Menyempit)' : clampedLevel < 0 ? '(Meningkat)' : '(Standar)'}
           </span>
         </div>
@@ -338,18 +338,18 @@ export const AmperaCanvas: React.FC<AmperaCanvasProps> = ({
               opacity="0.8"
             />
             {/* Zero label banner on the left */}
-            <rect x="10" y={normalY - 11} width="115" height="22" fill="#0f172a" rx="4" opacity="0.9" />
-            <rect x="10" y={normalY - 11} width="115" height="22" stroke="#fbbf24" strokeWidth="1" rx="4" fill="none" />
+            <rect x="8" y={normalY - 10} width="96" height="20" fill="#0f172a" rx="4" opacity="0.9" />
+            <rect x="8" y={normalY - 10} width="96" height="20" stroke="#fbbf24" strokeWidth="1" rx="4" fill="none" />
             <text
-              x="67"
+              x="56"
               y={normalY + 4}
               fill="#fbbf24"
-              fontSize="10"
+              fontSize="9"
               fontWeight="bold"
               textAnchor="middle"
               fontFamily="sans-serif"
             >
-              Titik Acuan (0 m)
+              Titik Acuan (0m)
             </text>
           </g>
 
@@ -468,23 +468,23 @@ export const AmperaCanvas: React.FC<AmperaCanvasProps> = ({
           <g
             id="waterLevelTag"
             className="transition-all duration-700 ease-out"
-            transform={`translate(200, ${waterY - 14})`}
+            transform={`translate(160, ${waterY - 12})`}
           >
             <rect
-              x="-60"
-              y="-10"
-              width="120"
-              height="20"
+              x="-36"
+              y="-9"
+              width="72"
+              height="18"
               rx="4"
-              fill="#0284c7"
+              fill="#0369a1"
               stroke="#7dd3fc"
-              strokeWidth="1.5"
+              strokeWidth="1.2"
             />
             <text
               x="0"
-              y="4"
+              y="3.5"
               fill="#ffffff"
-              fontSize="11"
+              fontSize="10"
               fontFamily="monospace"
               fontWeight="bold"
               textAnchor="middle"
@@ -495,16 +495,16 @@ export const AmperaCanvas: React.FC<AmperaCanvasProps> = ({
         </svg>
 
         {/* OVERLAY PEIL SCHAAL GAUGE (Right-positioned real-life observation staff) */}
-        <div className="absolute right-4 top-14 bottom-4 z-20 flex items-center">
-          <div className="bg-slate-900/90 backdrop-blur-md p-2.5 rounded-xl border border-slate-700 shadow-2xl">
+        <div className="absolute right-2.5 top-2.5 bottom-2.5 z-20 flex items-center">
+          <div className="bg-slate-900/95 backdrop-blur-md p-2 rounded-xl border border-slate-700 shadow-2xl">
             <PeilSchaalGauge
               currentLevel={clampedLevel}
               previousLevel={previousLevel}
               interactive={interactiveGauge}
               onSelectLevel={onSelectLevel}
-              height={280}
-              title="Peil Schaal Musi"
-              stationName={locationName.includes('Benteng') ? 'Dermaga BKB' : locationName.includes('Ulu') ? 'Seberang Ulu' : 'Ampera'}
+              height={220}
+              showLabels={false}
+              title="Peil Schaal"
             />
           </div>
         </div>
